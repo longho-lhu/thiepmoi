@@ -28,6 +28,18 @@ npm run dev                # http://localhost:3000
    Đổi hoạ tiết thì thay file trong `source-img/` (giữ nguyên tên) rồi chạy lại lệnh.
 5. Quét thử mã VietQR bằng 2–3 app ngân hàng; đối chiếu ngày âm lịch với lịch vạn niên Việt Nam.
 
+## Chạy bằng PM2 (cổng 3001)
+
+```bash
+npm i -g pm2                  # nếu máy chưa có pm2
+npm run build
+pm2 start ecosystem.config.js
+pm2 save && pm2 startup       # tự chạy lại khi khởi động máy
+```
+
+Cập nhật code: `git pull && npm ci && npx prisma migrate deploy && npm run build && pm2 restart thiep`.
+Xem log: `pm2 logs thiep`. Nhớ đặt `NEXT_PUBLIC_SITE_URL` trong `.env` đúng tên miền thật trước khi build.
+
 ## Ghi chú kỹ thuật
 
 - Ảnh và nhạc upload nằm ở `UPLOAD_DIR` (mặc định `data/uploads`), phục vụ qua `/api/media/[file]`.

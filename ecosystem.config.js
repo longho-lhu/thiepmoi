@@ -1,0 +1,20 @@
+module.exports = {
+  apps: [
+    {
+      name: 'thiep-moi',
+      cwd: __dirname,
+      // Gọi thẳng Next.js thay vì "npm start" để chạy được cả trên Windows lẫn Linux
+      script: 'node_modules/next/dist/bin/next',
+      args: 'start -p 3001',
+      exec_mode: 'fork',
+      instances: 1,
+      autorestart: true,
+      max_memory_restart: '1000M',
+      time: true, // thêm thời gian vào log
+      env: {
+        NODE_ENV: 'production',
+        PORT: '3001',
+      },
+    },
+  ],
+};
