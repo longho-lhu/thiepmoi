@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Wedding {
+  id               Int      @id @default(1)
+  groomName        String
+  groomRole        String   // "Trưởng Nam"
+  groomFather      String
+  groomMother      String
+  groomAddress     String
+  brideName        String
+  brideRole        String   // "Út Nữ"
+  brideFather      String
+  brideMother      String
+  brideAddress     String
+  ceremonyAt       DateTime // giờ làm lễ
+  ceremonyPlace    String   // "Tư gia"
+  receptionAt      DateTime // giờ đón khách
+  partyAt          DateTime // giờ khai tiệc
+  venueName        String
+  venueAddress     String
+  mapUrl           String?  // link chia sẻ Google Maps, VD https://maps.app.goo.gl/xxx
+  mapQuery         String?  // vị trí đọc từ mapUrl: "lat,lng" hoặc tên địa điểm
+  showDressCode    Boolean  @default(true) // bật/tắt section Dress code trên thiệp
+  dressCodeNote    String?
+  dressCodeColors  String   @default("[]") // JSON: ["#9e1b1f","#f3e9d2"]
+  schedule         String   @default("[]") // JSON: [{"time":"17:30","title":"Đón khách"}]
+  groomBankBin     String?  // mã BIN ngân hàng, VD 970436 = Vietcombank
+  groomBankName    String?
+  groomAccountNo   String?
+  groomAccountName String?
+  brideBankBin     String?
+  brideBankName    String?
+  brideAccountNo   String?
+  brideAccountName String?
+  musicFile        String?
+  coverImage       String?
+  closingMessage   String   @default("Sự hiện diện của quý khách là niềm vinh hạnh của gia đình chúng tôi!")
+  updatedAt        DateTime @updatedAt
+}
+
+model Photo {
+  id        Int      @id @default(autoincrement())
+  file      String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Guest {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique // mã trong link /k/[code]
+  displayName String   // "Gia đình em Tính & Tuyết"
+  side        String   @default("chung") // "trai" | "gai" | "chung"
+  note        String?
+  createdAt   DateTime @default(now())
+  rsvps       Rsvp[]
+}
+
+model Rsvp {
+  id        Int      @id @default(autoincrement())
+  guestId   Int?
+  guest     Guest?   @relation(fields: [guestId], references: [id], onDelete: SetNull)
+  name      String
+  phone     String?
+  attending Boolean
+  headcount Int      @default(1)
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+model Wish {
+  id        Int      @id @default(autoincrement())
+  name      String
+  content   String
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

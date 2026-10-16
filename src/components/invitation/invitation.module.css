@@ -1,0 +1,1036 @@
+.page {
+  --red: #9e1b1f;
+  --red-deep: #7a1215;
+  --gold: #b8893a;
+  --gold-light: #e6c77d;
+  --paper: #fbf6ec;
+  --cream: #f3e9d2;
+  --ink: #3a2a22;
+  --muted: #7d6a5c;
+
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(158, 27, 31, 0.06), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(184, 137, 58, 0.08), transparent 45%),
+    #e9dcc4;
+  color: var(--ink);
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 624px;
+  background:
+    radial-gradient(rgba(184, 137, 58, 0.07) 1px, transparent 1px) 0 0 / 14px 14px,
+    var(--paper);
+  box-shadow: 0 0 40px rgba(58, 42, 34, 0.15);
+  overflow: hidden;
+}
+
+/* ---------- Khung góc ---------- */
+
+.framed {
+  position: relative;
+  padding-top: 72px;
+  padding-bottom: 96px;
+}
+
+.corner {
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  background: url('/theme/corner.svg') no-repeat center / contain;
+  pointer-events: none;
+}
+
+.tl { top: 10px; left: 10px; }
+.tr { top: 10px; right: 10px; transform: scale(-1, 1); }
+.bl { bottom: 10px; left: 10px; transform: scale(1, -1); }
+.br { bottom: 10px; right: 10px; transform: scale(-1, -1); }
+
+/* ---------- Section chung ---------- */
+
+.section {
+  position: relative;
+  isolation: isolate; /* để hoạ tiết z-index: -1 nằm trên nền nhưng dưới nội dung */
+  padding: 56px 28px;
+  text-align: center;
+}
+
+.sectionAlt {
+  background: rgba(243, 233, 210, 0.55);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-serif), serif;
+  font-weight: 500;
+  font-size: 30px;
+  color: var(--red);
+  line-height: 1.25;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 14px auto 24px;
+  color: var(--red);
+  font-size: 18px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+
+.divider::after {
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.lead {
+  margin: 0 auto 20px;
+  max-width: 442px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.script {
+  font-family: var(--font-script), cursive;
+  color: var(--red);
+  font-weight: 400;
+}
+
+.btn,
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.btn {
+  border: 0;
+  color: #fff;
+  background: linear-gradient(180deg, #b32428, var(--red-deep));
+  box-shadow: 0 6px 16px rgba(158, 27, 31, 0.3);
+}
+
+.btnGhost {
+  border: 1px solid var(--red);
+  color: var(--red);
+  background: transparent;
+}
+
+.btn:hover,
+.btnGhost:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active,
+.btnGhost:active {
+  transform: translateY(1px);
+}
+
+.btnRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+/* ---------- Bìa phong bì ---------- */
+
+.envelopeScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 24px 16px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(rgba(158, 27, 31, 0.08) 1px, transparent 1px) 0 0 / 16px 16px,
+    #f3e9d2;
+  text-align: center;
+}
+
+.fallingHy {
+  position: absolute;
+  top: -10%;
+  color: var(--red);
+  opacity: 0;
+  pointer-events: none;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  font-family: serif;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.55; }
+  85% { opacity: 0.45; }
+  100% { transform: translateY(120dvh) rotate(300deg); opacity: 0; }
+}
+
+.envelopeHead {
+  position: relative;
+  z-index: 1;
+}
+
+.lanternLeft,
+.lanternRight {
+  width: clamp(44px, 11vw, 70px);
+}
+
+.lanternLeft {
+  left: max(5%, 14px);
+}
+
+.lanternRight {
+  right: max(5%, 14px);
+  animation-delay: -2.2s;
+}
+
+.envCloud {
+  position: absolute;
+  z-index: 0;
+  width: min(72vw, 520px);
+  height: auto;
+  opacity: 0.85;
+  pointer-events: none;
+  user-select: none;
+  animation: drift 10s ease-in-out infinite;
+}
+
+.envCloudLeft {
+  left: -16%;
+  bottom: 2%;
+}
+
+.envCloudRight {
+  right: -16%;
+  bottom: 13%;
+  opacity: 0.6;
+  transform: scaleX(-1);
+  animation-direction: reverse;
+}
+
+.envelopeHead p {
+  margin: 0;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.guestName {
+  margin: 6px 0 4px;
+  font-family: var(--font-script), cursive;
+  font-size: clamp(30px, 8vw, 40px);
+  color: var(--red);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.envelope {
+  position: relative;
+  z-index: 1;
+  width: min(84vw, 360px);
+  aspect-ratio: 3 / 2;
+  perspective: 1200px;
+}
+
+.envBack {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: var(--red-deep);
+  box-shadow: 0 18px 40px rgba(122, 18, 21, 0.35);
+}
+
+.letter {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 6%;
+  height: 88%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 8%;
+  border-radius: 4px;
+  background: var(--paper);
+  border: 1px solid var(--gold-light);
+}
+
+.letterHy {
+  width: 64px;
+  height: auto;
+}
+
+.letterNames {
+  margin-top: 6px;
+  font-family: var(--font-script), cursive;
+  font-size: 26px;
+  color: var(--red);
+}
+
+.letterDate {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.envPocket {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 8px;
+  background: linear-gradient(160deg, #b32428, var(--red) 55%, var(--red-deep));
+  clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 7%;
+}
+
+.pocketNames {
+  font-family: var(--font-script), cursive;
+  font-size: clamp(20px, 5.5vw, 26px);
+  color: var(--gold-light);
+}
+
+.envFlap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 62%;
+  transform-origin: top center;
+  background: linear-gradient(180deg, #a51f23, #861417);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: 8px 8px 0 0;
+}
+
+.seal {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  z-index: 5;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 2px solid #f6dfa0;
+  background: radial-gradient(circle at 35% 30%, #f6dfa0, var(--gold) 70%);
+  color: var(--red-deep);
+  font-size: 26px;
+  font-family: serif;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.openBtn {
+  position: relative;
+  z-index: 1;
+}
+
+.pulse {
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(158, 27, 31, 0.35); }
+  50% { box-shadow: 0 0 0 12px rgba(158, 27, 31, 0); }
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding: 64px 24px 0;
+  text-align: center;
+}
+
+.heroHyImg {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin: 0 auto 14px;
+}
+
+.heroLanternLeft,
+.heroLanternRight {
+  width: 50px;
+}
+
+.heroLanternLeft {
+  left: 22px;
+}
+
+.heroLanternRight {
+  right: 22px;
+  animation-delay: -2s;
+}
+
+.coupleWrap {
+  position: relative;
+  margin: 28px auto 0;
+  padding-bottom: 64px; /* chừa chỗ cho mây, để mây chỉ che phần chân */
+}
+
+/* Ảnh dâu rể (hoặc ảnh bìa) nằm trước mây */
+.coupleImg,
+.coupleWrap .cover {
+  position: relative;
+  z-index: 1;
+}
+
+.coupleImg {
+  display: block;
+  width: 76%;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* Mây nằm phía sau, dưới chân cô dâu chú rể */
+.coupleCloud {
+  position: absolute;
+  z-index: 0;
+  left: -4%;
+  bottom: 0;
+  width: 108%;
+  height: auto;
+  pointer-events: none;
+}
+
+.cover {
+  width: 78%;
+  aspect-ratio: 3 / 4;
+  margin: 0 auto 48px;
+  border-radius: 200px 200px 12px 12px;
+  border: 6px solid #fff;
+  outline: 1px solid var(--gold);
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 10px 30px rgba(58, 42, 34, 0.18);
+}
+
+.heroNames {
+  margin: 8px 0 6px;
+  font-family: var(--font-script), cursive;
+  font-size: clamp(40px, 11vw, 52px);
+  line-height: 1.15;
+  color: var(--red);
+  font-weight: 400;
+}
+
+.heroDate {
+  font-family: var(--font-serif), serif;
+  font-size: 20px;
+  letter-spacing: 0.24em;
+  color: var(--ink);
+}
+
+/* ---------- Thông tin lễ cưới ---------- */
+
+.families {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.family h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.family p {
+  margin: 2px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.family small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.couple {
+  margin: 8px 0 24px;
+}
+
+.role {
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.personName {
+  margin: 2px 0 10px;
+  font-family: var(--font-script), cursive;
+  font-size: 34px;
+  color: var(--red);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.amp {
+  font-family: var(--font-serif), serif;
+  font-size: 22px;
+  color: var(--gold);
+  margin: 4px 0 10px;
+}
+
+.when {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  margin: 12px auto 10px;
+  max-width: 442px;
+}
+
+.whenSide {
+  padding: 8px 0;
+  border-top: 1px solid var(--gold);
+  border-bottom: 1px solid var(--gold);
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.whenDay {
+  font-family: var(--font-serif), serif;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--red);
+}
+
+.lunar {
+  margin: 4px 0 0;
+  font-style: italic;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.bigTime {
+  font-family: var(--font-serif), serif;
+  font-size: 26px;
+  color: var(--red);
+  margin: 6px 0;
+}
+
+.place {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+/* ---------- Album ---------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.thumb {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  cursor: zoom-in;
+  background: var(--cream);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s;
+}
+
+.thumb:hover img {
+  transform: scale(1.04);
+}
+
+.more {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(58, 18, 18, 0.5);
+  color: #fff;
+  font-family: var(--font-serif), serif;
+  font-size: 32px;
+}
+
+/* ---------- Tiệc cưới ---------- */
+
+.venue {
+  font-family: var(--font-serif), serif;
+  font-size: 22px;
+  color: var(--red);
+  margin: 0 0 4px;
+}
+
+.address {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 416px;
+  margin: 0 auto 20px;
+}
+
+.timeBox {
+  padding: 12px 8px;
+  border: 1px solid var(--gold-light);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.timeBox span {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.timeBox b {
+  font-family: var(--font-serif), serif;
+  font-size: 26px;
+  color: var(--red);
+  font-weight: 500;
+}
+
+/* ---------- Đếm ngược + lịch ---------- */
+
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.countdown div {
+  padding: 12px 4px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--red), var(--red-deep));
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(122, 18, 21, 0.25);
+}
+
+.countdown b {
+  display: block;
+  font-family: var(--font-serif), serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--gold-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown span {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.calendar {
+  padding: 18px 14px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--gold-light);
+}
+
+.calendarTitle {
+  margin: 0 0 12px;
+  font-family: var(--font-serif), serif;
+  font-size: 20px;
+  color: var(--red);
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 6px;
+  font-size: 14px;
+}
+
+.calendarGrid .dow {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  padding-bottom: 4px;
+}
+
+.calendarGrid .day {
+  height: 36px;
+  display: grid;
+  place-items: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.calendarGrid .wedding {
+  position: relative;
+  color: #fff;
+  font-weight: 600;
+}
+
+.calendarGrid .wedding::before {
+  content: '';
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--red);
+  z-index: 0;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 4px var(--gold);
+}
+
+.calendarGrid .wedding span {
+  position: relative;
+}
+
+/* ---------- Bản đồ ---------- */
+
+.map {
+  width: 100%;
+  height: 260px;
+  border: 0;
+  border-radius: 14px;
+  display: block;
+  background: var(--cream);
+}
+
+/* ---------- Dress code ---------- */
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.swatch {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px var(--gold), 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- Lịch trình ---------- */
+
+.timeline {
+  max-width: 416px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.timeline b {
+  color: var(--red);
+  margin-right: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Sổ lưu bút ---------- */
+
+.guestbookForm {
+  text-align: left;
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--gold-light);
+  margin-bottom: 18px;
+}
+
+.wishes {
+  max-height: 380px;
+  overflow-y: auto;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
+}
+
+.wish {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  border-left: 3px solid var(--red);
+}
+
+.wish b {
+  color: var(--red);
+}
+
+.wish p {
+  margin: 4px 0 0;
+  line-height: 1.6;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Hộp quà ---------- */
+
+.gifts {
+  display: grid;
+  gap: 14px;
+}
+
+.qr {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin: 0 auto 8px;
+  image-rendering: pixelated;
+}
+
+.giftHy {
+  display: block;
+  width: 110px;
+  height: auto;
+  margin: 0 auto 12px;
+}
+
+.fan {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin: -4px auto 14px;
+}
+
+/* ---------- Kết ---------- */
+
+.closing {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 160px 44px 130px;
+  text-align: center;
+  background: linear-gradient(180deg, transparent, rgba(158, 27, 31, 0.06));
+}
+
+.closing p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin: 0 auto 12px;
+  max-width: 442px;
+}
+
+.thanks {
+  font-family: var(--font-script), cursive;
+  font-size: 40px;
+  color: var(--red);
+  margin: 8px 0;
+}
+
+/* ---------- Nhạc ---------- */
+
+/* Nút đĩa than nằm sát góc phải dưới của màn hình */
+.music {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 50;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.disc {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  /* rãnh đĩa + vệt sáng */
+  background:
+    conic-gradient(from 30deg, transparent 0 12%, rgba(255, 255, 255, 0.16) 18%, transparent 26% 62%, rgba(255, 255, 255, 0.1) 68%, transparent 76%),
+    repeating-radial-gradient(circle, #151515 0 1.4px, #2b2b2b 1.4px 2.8px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), 0 0 0 2px var(--gold-light);
+  animation: spin 3.2s linear infinite;
+}
+
+/* Nhãn đỏ giữa đĩa */
+.discLabel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42%;
+  height: 42%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c4363a, var(--red-deep));
+  box-shadow: 0 0 0 1.5px var(--gold);
+  color: var(--gold-light);
+  font-size: 11px;
+  font-family: serif;
+  line-height: 1;
+}
+
+.musicPaused .disc {
+  animation-play-state: paused;
+  filter: saturate(0.6) brightness(0.9);
+}
+
+.discPlay {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-size: 11px;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Hoạ tiết ảnh (source-img) ---------- */
+
+.deco {
+  position: absolute;
+  z-index: -1;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Đèn lồng treo từ mép trên, đung đưa nhẹ */
+.lantern {
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: top center;
+  animation: swing 4.5s ease-in-out infinite;
+}
+
+/* Cành mai ở góc: ảnh gốc mọc từ góc dưới trái, lật để mọc từ góc trên */
+.branchTopLeft {
+  width: 124px;
+  top: -10px;
+  left: -38px;
+  transform: scaleY(-1);
+}
+
+.branchTopRight {
+  width: 124px;
+  top: -10px;
+  right: -38px;
+  transform: scale(-1, -1);
+}
+
+.cloudTopRight {
+  width: 210px;
+  top: 22px;
+  right: -70px;
+  opacity: 0.55;
+  animation: drift 10s ease-in-out infinite;
+}
+
+.closingCloudLeft {
+  width: 240px;
+  left: -80px;
+  bottom: 10px;
+  opacity: 0.85;
+  animation: drift 11s ease-in-out infinite;
+}
+
+.closingCloudRight {
+  width: 240px;
+  right: -80px;
+  bottom: 70px;
+  opacity: 0.6;
+  transform: scaleX(-1);
+  animation: drift 9s ease-in-out infinite reverse;
+}
+
+@keyframes swing {
+  0%, 100% { rotate: -4deg; }
+  50% { rotate: 4deg; }
+}
+
+/* Dùng thuộc tính translate riêng để không đè transform (lật ảnh) */
+@keyframes drift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 16px -4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fallingHy,
+  .disc,
+  .pulse,
+  .lantern,
+  .envCloud,
+  .cloudTopRight,
+  .closingCloudLeft,
+  .closingCloudRight {
+    animation: none;
+  }
+}
