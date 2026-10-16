@@ -15,3 +15,18 @@ export async function isAdminToken(token: string | undefined) {
     return false;
   }
 }
+
+const cookieRe = new RegExp(`(?:^|;\\s*)${ADMIN_COOKIE}=([^;]+)`);
+
+// Bọc API /api/admin/*: kiểm tra cookie ngay trong route thay vì ở middleware.
+// Request đi qua middleware bị Next.js sao chép body (tối đa 10MB và lỗi với file lớn),
+// nên upload ảnh/nhạc phải tránh middleware.
+export function withAdmin<A extends unknown[]>(handler: (req: Request, ...args: A) => Promise<Response>) {
+  return async (req: Request, ...args: A) => {
+    const token = req.headers.get('cookie')?.match(cookieRe)?.[1];
+    if (!(await isAdminToken(token))) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return handler(req, ...args);
+  };
+}

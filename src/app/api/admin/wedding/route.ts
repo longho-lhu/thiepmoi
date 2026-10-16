@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/db';
+import { withAdmin } from '@/lib/auth';
 import { parseJson } from '@/lib/format';
 import { isGoogleMapsUrl, resolveMapsUrl } from '@/lib/maps';
 
@@ -41,7 +42,7 @@ const schema = z.object({
   closingMessage: text(300),
 });
 
-export async function GET() {
+async function handleGET() {
   const w = await prisma.wedding.findUnique({ where: { id: 1 } });
   if (!w) return NextResponse.json({ error: 'Chưa có dữ liệu, hãy chạy seed' }, { status: 404 });
   return NextResponse.json({
@@ -51,7 +52,7 @@ export async function GET() {
   });
 }
 
-export async function PUT(req: Request) {
+async function handlePUT(req: Request) {
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     const custom = parsed.error.issues.find((i) => i.path[0] === 'mapUrl')?.message;
@@ -77,3 +78,6 @@ export async function PUT(req: Request) {
   const w = await prisma.wedding.upsert({ where: { id: 1 }, update: data, create: { id: 1, ...data } });
   return NextResponse.json({ ok: true, updatedAt: w.updatedAt, mapQuery: w.mapQuery });
 }
+
+export const GET = withAdmin(handleGET);
+export const PUT = withAdmin(handlePUT);

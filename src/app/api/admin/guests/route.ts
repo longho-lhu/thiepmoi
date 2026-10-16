@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/db';
+import { withAdmin } from '@/lib/auth';
 import { CODE_PATTERN, slugify } from '@/lib/slug';
 
 // Link mời lấy theo tên hiển thị: "Gia đình em Tính & Tuyết" -> /k/gia-dinh-em-tinh-tuyet.
@@ -26,7 +27,7 @@ const bulkSchema = z.object({
   side: side.default('chung'),
 });
 
-export async function GET() {
+async function handleGET() {
   const guests = await prisma.guest.findMany({
     orderBy: { createdAt: 'desc' },
     include: { rsvps: { orderBy: { id: 'desc' }, take: 1 } },
@@ -37,7 +38,7 @@ export async function GET() {
 }
 
 // Thêm 1 khách ({displayName, side, note}) hoặc nhiều khách ({names: [...], side})
-export async function POST(req: Request) {
+async function handlePOST(req: Request) {
   const body = await req.json().catch(() => null);
 
   const bulk = bulkSchema.safeParse(body);
@@ -56,7 +57,7 @@ export async function POST(req: Request) {
 }
 
 // Sửa khách. code: để trống = giữ link cũ; nhập giá trị = đổi link (kiểm tra trùng)
-export async function PUT(req: Request) {
+async function handlePUT(req: Request) {
   const parsed = guestSchema
     .extend({
       id: z.number().int(),
@@ -78,9 +79,14 @@ export async function PUT(req: Request) {
   return NextResponse.json(guest);
 }
 
-export async function DELETE(req: Request) {
+async function handleDELETE(req: Request) {
   const id = Number(new URL(req.url).searchParams.get('id'));
   if (!Number.isInteger(id)) return NextResponse.json({ error: 'Thiếu id' }, { status: 400 });
   await prisma.guest.delete({ where: { id } }).catch(() => null);
   return NextResponse.json({ ok: true });
 }
+
+export const GET = withAdmin(handleGET);
+export const POST = withAdmin(handlePOST);
+export const PUT = withAdmin(handlePUT);
+export const DELETE = withAdmin(handleDELETE);

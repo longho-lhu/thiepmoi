@@ -37,8 +37,8 @@ pm2 start ecosystem.config.js
 pm2 save && pm2 startup       # tự chạy lại khi khởi động máy
 ```
 
-Cập nhật code: `git pull && npm ci && npx prisma migrate deploy && npm run build && pm2 restart thiep`.
-Xem log: `pm2 logs thiep`. Nhớ đặt `NEXT_PUBLIC_SITE_URL` trong `.env` đúng tên miền thật trước khi build.
+Cập nhật code: `git pull && npm ci && npx prisma migrate deploy && npm run build && pm2 restart thiep-moi`.
+Xem log: `pm2 logs thiep-moi`. Nhớ đặt `NEXT_PUBLIC_SITE_URL` trong `.env` đúng tên miền thật trước khi build.
 
 ## Ghi chú kỹ thuật
 

@@ -4,6 +4,7 @@ import { unlink, writeFile } from 'node:fs/promises';
 import { NextResponse } from 'next/server';
 import sharp from 'sharp';
 import { prisma } from '@/lib/db';
+import { withAdmin } from '@/lib/auth';
 import { ensureUploadDir, safeFileName, uploadDir } from '@/lib/uploads';
 
 export const runtime = 'nodejs';
@@ -19,7 +20,7 @@ async function removeOld(kind: Kind) {
   if (old && safeFileName(old)) await unlink(path.join(uploadDir(), old)).catch(() => {});
 }
 
-export async function POST(req: Request) {
+async function handlePOST(req: Request) {
   const form = await req.formData().catch(() => null);
   const kind = form?.get('kind');
   const file = form?.get('file');
@@ -55,10 +56,13 @@ export async function POST(req: Request) {
   return NextResponse.json({ ok: true, file: name }, { status: 201 });
 }
 
-export async function DELETE(req: Request) {
+async function handleDELETE(req: Request) {
   const kind = new URL(req.url).searchParams.get('kind');
   if (!isKind(kind)) return NextResponse.json({ error: 'Dữ liệu không hợp lệ' }, { status: 400 });
   await removeOld(kind);
   await prisma.wedding.update({ where: { id: 1 }, data: { [FIELD[kind]]: null } });
   return NextResponse.json({ ok: true });
 }
+
+export const POST = withAdmin(handlePOST);
+export const DELETE = withAdmin(handleDELETE);

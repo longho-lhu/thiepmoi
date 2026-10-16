@@ -5,19 +5,20 @@ import { NextResponse } from 'next/server';
 import sharp from 'sharp';
 import { z } from 'zod';
 import { prisma } from '@/lib/db';
+import { withAdmin } from '@/lib/auth';
 import { ensureUploadDir, safeFileName, uploadDir } from '@/lib/uploads';
 
 export const runtime = 'nodejs';
 
 const MAX_BYTES = 20 * 1024 * 1024;
 
-export async function GET() {
+async function handleGET() {
   const photos = await prisma.photo.findMany({ orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
   return NextResponse.json(photos);
 }
 
 // Nhận ảnh, thu về cạnh dài 1600px, xuất WebP chất lượng 80
-export async function POST(req: Request) {
+async function handlePOST(req: Request) {
   const form = await req.formData().catch(() => null);
   const files = (form?.getAll('file') ?? []).filter((f): f is File => f instanceof File);
   if (files.length === 0) return NextResponse.json({ error: 'Chưa chọn ảnh' }, { status: 400 });
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
 }
 
 // Đổi thứ tự
-export async function PATCH(req: Request) {
+async function handlePATCH(req: Request) {
   const parsed = z.object({ id: z.number().int(), sortOrder: z.number().int().min(0).max(9999) })
     .safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: 'Dữ liệu không hợp lệ' }, { status: 400 });
@@ -51,10 +52,15 @@ export async function PATCH(req: Request) {
   return NextResponse.json(photo);
 }
 
-export async function DELETE(req: Request) {
+async function handleDELETE(req: Request) {
   const id = Number(new URL(req.url).searchParams.get('id'));
   if (!Number.isInteger(id)) return NextResponse.json({ error: 'Thiếu id' }, { status: 400 });
   const photo = await prisma.photo.delete({ where: { id } }).catch(() => null);
   if (photo && safeFileName(photo.file)) await unlink(path.join(uploadDir(), photo.file)).catch(() => {});
   return NextResponse.json({ ok: true });
 }
+
+export const GET = withAdmin(handleGET);
+export const POST = withAdmin(handlePOST);
+export const PATCH = withAdmin(handlePATCH);
+export const DELETE = withAdmin(handleDELETE);
