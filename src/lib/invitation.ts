@@ -1,10 +1,12 @@
 import 'server-only';
+import type { Metadata } from 'next';
 import type { Photo, Wedding, Wish } from '@prisma/client';
+import { ensureOgCover } from './og';
 import type { GiftAccount, InvitationData } from '@/components/invitation/types';
 import { prisma } from './db';
 import { lunarText } from './lunar';
 import { googleCalendarUrl } from './calendar';
-import { dateText, mediaUrl, parseJson, timeText, vnParts, weekdayText } from './format';
+import { dateText, lastWord, mediaUrl, parseJson, timeText, vnParts, weekdayText } from './format';
 import { stripVietnamese } from './vietqr';
 
 export async function loadInvitation() {
@@ -16,13 +18,40 @@ export async function loadInvitation() {
   return { wedding, photos, wishes };
 }
 
-export const coupleTitle = (w: Wedding) => `${shortName(w.groomName)} & ${shortName(w.brideName)}`;
+// Tên gọi trên thiệp: lấy ô "tên gọi" nếu có, không thì chữ cuối của họ tên
+const shortName = (short: string | null, full: string) => short?.trim() || lastWord(full);
 
-// "Nguyễn Minh Khang" -> "Khang", "Trần Diệu Anh" -> "Diệu Anh" (giữ 2 chữ cuối nếu tên đệm ngắn)
-function shortName(full: string) {
-  const parts = full.trim().split(/\s+/);
-  if (parts.length >= 3 && parts.at(-2)!.length <= 4 && parts.at(-1)!.length <= 3) return parts.slice(-2).join(' ');
-  return parts.at(-1) ?? full;
+// "Khang & Vân Anh": dùng cho tiêu đề trang, phong bì, ảnh chia sẻ, lịch, VietQR
+export const coupleTitle = (w: Wedding) =>
+  `${shortName(w.groomShortName, w.groomName)} & ${shortName(w.brideShortName, w.brideName)}`;
+
+// Metadata của trang thiệp: tiêu đề, mô tả và ảnh xem trước khi chia sẻ đều lấy từ dữ liệu hiện tại,
+// nên đổi tên cô dâu chú rể hay ngày cưới trong trang quản trị là tự cập nhật theo
+export async function invitationMetadata(w: Wedding | null, guestName: string | null): Promise<Metadata> {
+  const robots = { index: false, follow: false };
+  if (!w) return { title: 'Thiệp cưới', robots };
+
+  const couple = coupleTitle(w);
+  const date = dateText(w.partyAt);
+  const title = `Thiệp cưới ${couple}`;
+  const description = guestName
+    ? `Thân mời ${guestName} đến dự lễ thành hôn của ${couple} – ${date}`
+    : `Trân trọng kính mời bạn đến dự lễ thành hôn của ${couple} – ${date}`;
+
+  const site = (process.env.NEXT_PUBLIC_SITE_URL ?? '').replace(/\/$/, '');
+  const ogFile = await ensureOgCover(couple, date).catch((e) => {
+    console.error('Không tạo được ảnh OG', e);
+    return null;
+  });
+  const images = ogFile ? [{ url: `${site}${mediaUrl(ogFile)}`, width: 1200, height: 630, alt: title }] : [];
+
+  return {
+    title,
+    description,
+    openGraph: { type: 'website', locale: 'vi_VN', siteName: title, title, description, images },
+    twitter: { card: 'summary_large_image', title, description, images: images.map((i) => i.url) },
+    robots,
+  };
 }
 
 export function toInvitationData(

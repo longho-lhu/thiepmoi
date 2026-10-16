@@ -11,6 +11,8 @@ const optional = (max: number) =>
 
 const schema = z.object({
   groomName: text(80),
+  groomShortName: optional(40),
+  brideShortName: optional(40),
   groomRole: text(40),
   groomFather: text(80),
   groomMother: text(80),

@@ -10,11 +10,13 @@ datasource db {
 model Wedding {
   id               Int      @id @default(1)
   groomName        String
+  groomShortName   String?  // tên gọi trên thiệp, VD "Khang"; trống = chữ cuối của groomName
   groomRole        String   // "Trưởng Nam"
   groomFather      String
   groomMother      String
   groomAddress     String
   brideName        String
+  brideShortName   String?  // VD "Diệu Anh"; trống = chữ cuối của brideName
   brideRole        String   // "Út Nữ"
   brideFather      String
   brideMother      String

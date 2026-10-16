@@ -31,4 +31,7 @@ export function parseJson<T>(s: string | null | undefined, fallback: T): T {
   }
 }
 
-export const mediaUrl = (file: string) => `/api/media/${encodeURIComponent(file)}`;
+// "Nguyễn Minh Khang" -> "Khang"
+export const lastWord = (full: string) => full.trim().split(/\s+/).at(-1) ?? full;
+
+export const mediaUrl =(file: string) => `/api/media/${encodeURIComponent(file)}`;

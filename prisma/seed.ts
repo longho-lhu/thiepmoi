@@ -39,6 +39,8 @@ async function main() {
 
   const wedding = {
     groomName: 'Nguyễn Minh Khang',
+    groomShortName: 'Khang',
+    brideShortName: 'Diệu Anh',
     groomRole: 'Trưởng Nam',
     groomFather: 'Nguyễn Văn Hoà',
     groomMother: 'Lê Thị Thu',

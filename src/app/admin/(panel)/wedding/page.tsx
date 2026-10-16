@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import { DeleteOutlined, MinusCircleOutlined, PlusOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons';
 import { api } from '@/lib/api';
-import { mediaUrl } from '@/lib/format';
+import { lastWord, mediaUrl } from '@/lib/format';
 
 // Mã BIN một số ngân hàng phổ biến (dùng cho VietQR)
 const BANKS = [
@@ -160,6 +160,17 @@ export default function WeddingPage() {
               <Card title={p === 'groom' ? 'Nhà trai' : 'Nhà gái'} style={{ marginBottom: 16 }}>
                 <Form.Item name={`${p}Name`} label={p === 'groom' ? 'Tên chú rể' : 'Tên cô dâu'} rules={req}>
                   <Input maxLength={80} />
+                </Form.Item>
+                <Form.Item noStyle shouldUpdate={(a, b) => a[`${p}Name`] !== b[`${p}Name`]}>
+                  {({ getFieldValue }) => (
+                    <Form.Item
+                      name={`${p}ShortName`}
+                      label="Tên gọi trên thiệp"
+                      extra="Dùng cho tiêu đề trang, phong bì và ảnh xem trước khi chia sẻ link. Để trống = lấy chữ cuối của tên."
+                    >
+                      <Input maxLength={40} placeholder={lastWord(getFieldValue(`${p}Name`) ?? '') || undefined} />
+                    </Form.Item>
+                  )}
                 </Form.Item>
                 <Form.Item name={`${p}Role`} label="Vai vế" rules={req}>
                   <Input maxLength={40} placeholder={p === 'groom' ? 'Trưởng Nam' : 'Út Nữ'} />

@@ -19,13 +19,11 @@ npm run dev                # http://localhost:3000
 
 ## Việc cần làm với dữ liệu thật
 
-1. Vào **Thông tin cưới**: sửa tên, gia đình, giờ lễ/tiệc, địa điểm, tài khoản ngân hàng, tải nhạc nền và ảnh bìa.
+1. Vào **Thông tin cưới**: sửa tên và **tên gọi trên thiệp** (VD "Khang", "Vân Anh"), gia đình, giờ lễ/tiệc, địa điểm, tài khoản ngân hàng, tải nhạc nền và ảnh bìa.
+   Tiêu đề trang, mô tả và ảnh xem trước khi chia sẻ link Zalo/Facebook tự cập nhật theo tên gọi và ngày tiệc.
 2. Vào **Album ảnh**: xoá ảnh giữ chỗ, tải ảnh cưới (tự nén sang WebP 1600px).
 3. Vào **Khách mời** → **Nhập nhiều**: dán danh sách tên, mỗi dòng một khách.
-4. Nén lại hoạ tiết và tạo lại ảnh xem trước khi chia sẻ Zalo/Facebook:
-   `npm run theme -- "Khang & Diệu Anh" "20.12.2026"`
-   Lệnh này đọc ảnh gốc trong `source-img/`, xuất bản nén vào `public/theme/` và tạo `public/theme/og-cover.jpg`.
-   Đổi hoạ tiết thì thay file trong `source-img/` (giữ nguyên tên) rồi chạy lại lệnh.
+4. Đổi hoạ tiết: thay file trong `source-img/` (giữ nguyên tên) rồi chạy `npm run theme` để nén vào `public/theme/`.
 5. Quét thử mã VietQR bằng 2–3 app ngân hàng; đối chiếu ngày âm lịch với lịch vạn niên Việt Nam.
 
 ## Chạy bằng PM2 (cổng 3001)

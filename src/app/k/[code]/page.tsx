@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import Invitation from '@/components/invitation/Invitation';
-import { coupleTitle, loadInvitation, toInvitationData } from '@/lib/invitation';
+import { invitationMetadata, loadInvitation, toInvitationData } from '@/lib/invitation';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,13 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     prisma.guest.findUnique({ where: { code } }),
     prisma.wedding.findUnique({ where: { id: 1 } }),
   ]);
-  const site = process.env.NEXT_PUBLIC_SITE_URL!;
-  return {
-    title: wedding ? `Thiệp cưới ${coupleTitle(wedding)}` : 'Thiệp cưới',
-    description: guest ? `Thân mời ${guest.displayName}` : 'Trân trọng kính mời',
-    openGraph: { images: [{ url: `${site}/theme/og-cover.jpg`, width: 1200, height: 630 }] },
-    robots: { index: false, follow: false },
-  };
+  return invitationMetadata(wedding, guest?.displayName ?? null);
 }
 
 export default async function GuestPage({ params }: Props) {
